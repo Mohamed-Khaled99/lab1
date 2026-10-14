@@ -1,0 +1,76 @@
+version: 2
+
+models:
+
+  # -------------------------
+  # Customer Model
+  # -------------------------
+  - name: stg_customer
+
+    columns:
+
+      - name: CustomerID
+        tests:
+          - not_null
+          - unique
+
+
+  # -------------------------
+  # Customer Dimension
+  # -------------------------
+  - name: dim_customer
+
+    columns:
+
+      - name: CustomerID
+        tests:
+          - not_null
+          - unique
+
+
+  # -------------------------
+  # Sales Fact
+  # -------------------------
+  - name: fact_sales
+
+    columns:
+
+      - name: CustomerID
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_customer')
+                field: CustomerID
+
+      - name: OrderStatus
+        tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5]
+
+
+seeds:
+
+  # -------------------------
+  # Product Category Mapping Seeds
+  # -------------------------
+  - name: product_category_mapping
+
+    columns:
+
+      - name: ProductCategoryID
+        tests:
+          - not_null
+          - unique
+
+      - name: BusinessGroup
+        tests:
+          - unique
+          - accepted_values:
+              arguments:
+                values:
+                  - Vehicle
+                  - Parts
+                  - Apparel
+                  - Accessories
+                  - Equipment

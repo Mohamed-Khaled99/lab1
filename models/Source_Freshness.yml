@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: adventureworks_freshness
+    database: AdventureWorksLT2019
+    schema: SalesLT
+
+    tables:
+      - name: SalesOrderHeader
+        loaded_at_field: ModifiedDate
+
+        freshness:
+          warn_after:
+            count: 1
+            period: hour
+
+          error_after:
+            count: 2
+            period: hour

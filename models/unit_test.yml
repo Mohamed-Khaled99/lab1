@@ -1,0 +1,31 @@
+
+version: 2
+
+unit_tests:
+  - name: test_fact_sales_calculation
+    description: "Test fact_sales output using mocked int_sales data"
+    model: fact_sales
+
+    given:
+      - input: ref('int_sales')
+        format: sql
+        rows: |
+          SELECT
+              1 AS SalesOrderDetailID,
+              100 AS SalesOrderID,
+              CAST('2026-01-01' AS DATE) AS OrderDate,
+              1 AS CustomerID,
+              10 AS ProductID,
+              4 AS OrderQty,
+              CAST(100.00 AS DECIMAL(10,2)) AS UnitPrice,
+              CAST(400.00 AS DECIMAL(12,2)) AS SalesAmount
+
+    expect:
+      rows:
+        - SalesOrderID: 100
+          OrderDate: '2026-01-01'
+          CustomerID: 1
+          ProductID: 10
+          OrderQty: 4 
+          UnitPrice: 100.00
+          SalesAmount: 400.00
