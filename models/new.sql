@@ -1,1 +1,1 @@
-Select 1 as id 
+Select 1 as id  
