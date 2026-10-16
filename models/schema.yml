@@ -1,15 +1,22 @@
+
 version: 2
 
 models:
 
   # -------------------------
-  # Customer Model
+  # Customer Staging Model
   # -------------------------
   - name: stg_customer
+    description: >
+      Staging model for customer data. Standardizes and prepares raw customer
+      records for downstream transformations and analytical models.
 
     columns:
 
       - name: CustomerID
+        description: >
+          Unique identifier for each customer. Used to identify customer
+          records and connect customer data across the data warehouse.
         tests:
           - not_null
           - unique
@@ -19,10 +26,17 @@ models:
   # Customer Dimension
   # -------------------------
   - name: dim_customer
+    description: >
+      Customer dimension containing customer-level information for analytical
+      reporting. Provides a consistent customer reference for downstream fact
+      tables and business intelligence queries.
 
     columns:
 
       - name: CustomerID
+        description: >
+          Primary business identifier for a customer. Must be populated and
+          unique within the customer dimension.
         tests:
           - not_null
           - unique
@@ -32,10 +46,17 @@ models:
   # Sales Fact
   # -------------------------
   - name: fact_sales
+    description: >
+      Sales fact model containing transactional sales data for business
+      analysis and reporting. Connects sales records to customer information
+      and provides order status information for sales performance analysis.
 
     columns:
 
       - name: CustomerID
+        description: >
+          Identifier of the customer associated with the sales record.
+          Must correspond to an existing customer in the dim_customer model.
         tests:
           - relationships:
               arguments:
@@ -43,6 +64,9 @@ models:
                 field: CustomerID
 
       - name: OrderStatus
+        description: >
+          Numeric code representing the status of an order. Valid status
+          codes are restricted to 1, 2, 3, 4, and 5.
         tests:
           - accepted_values:
               arguments:
@@ -52,18 +76,29 @@ models:
 seeds:
 
   # -------------------------
-  # Product Category Mapping Seeds
+  # Product Category Mapping
   # -------------------------
   - name: product_category_mapping
+    description: >
+      Reference mapping seed that associates product category identifiers
+      with business groups. Provides a standardized classification for
+      grouping products in analytical models and reports.
 
     columns:
 
       - name: ProductCategoryID
+        description: >
+          Unique identifier for a product category. Used to associate
+          products with their corresponding category mapping.
         tests:
           - not_null
           - unique
 
       - name: BusinessGroup
+        description: >
+          Business group assigned to a product category. Accepted values
+          are Vehicle, Parts, Apparel, Accessories, and Equipment.
+          Used to classify products for business reporting and analysis.
         tests:
           - unique
           - accepted_values:
